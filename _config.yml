@@ -3,22 +3,37 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
-author: John Doe
-language: en
+title: 宁翰のHEXO
+subtitle: '我的世界'
+description: '踏着梦走过时光'
+keywords: 
+  - YunYouJun
+  - Blog
+  - 云游君
+  - 博客
+  - 云游君的小站
+  - yunyoujun.cn
+  - www.yunyoujun.cn
+author: 宁翰
+language: zh-CN
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
-permalink: :year/:month/:day/:title/
-permalink_defaults:
-pretty_urls:
-  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+url: https://20020730.xyz
+root: /
+# permalink: :year/:month/:day/:title/  # 旧的注释掉
+# permalink_defaults:                   # 旧的注释掉
+permalink: posts/:abbrlink/
+abbrlink:
+  alg: crc32 # support crc16(default) and crc32
+  rep: hex # support dec(default) and hex
+  drafts: false # (true)Process draft,(false)Do not process draft
+  # Generate categories from directory-tree
+  # depth: the max_depth of directory-tree you want to generate, should > 0
+  auto_category:
+    enable: false # 默认为 true， 手改改为 false
+    depth:
 
 # Directory
 source_dir: source
@@ -96,7 +111,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: yun
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -104,3 +119,20 @@ deploy:
   type: git
   repository: git@github.com:Wanglihan954/Wanglihan954.github.io.git
   branch: main
+aplayer:
+  cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.js
+  style_cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css
+  meting: true
+  meting_cdn: https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js
+footer:
+  live_time:
+    enable: false
+    prefix: 本博客已萌萌哒地运行
+    suffix: (●'◡'●)
+    start_time: '2025-12-01T00:00:00'
+fireworks:
+  enable: true
+  colors:
+    - '102, 167, 221'
+    - '62, 131, 225'
+    - '33, 78, 194'
