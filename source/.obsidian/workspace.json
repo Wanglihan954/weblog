@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "Template/Hexo-Template.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "Hexo-Template"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Template/Hexo-Template.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "README 的反向链接列表"
+              "title": "Hexo-Template 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Template/Hexo-Template.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "README 的出链列表"
+              "title": "Hexo-Template 的出链列表"
             }
           },
           {
@@ -207,10 +207,11 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ce6528ed7539025e",
+  "active": "545bb30c0b3974ff",
   "lastOpenFiles": [
-    "未命名.base",
     "README.md",
+    "Template/Hexo-Template.md",
+    "未命名.base",
     "_posts/第1课 深度学习推理框架基础.md",
     "Template"
   ]
