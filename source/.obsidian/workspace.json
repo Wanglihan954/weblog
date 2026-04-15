@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/Mamba/A Gentle Introduction to HiPPO and its Friends.md",
+                "file": "Templates/Hexo-Template.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "A Gentle Introduction to HiPPO and its Friends"
+              "title": "Hexo-Template"
             }
           }
         ]
@@ -207,16 +207,17 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "1026629aa2350c03",
+  "active": "4965700aa34dc55c",
   "lastOpenFiles": [
-    "Template/Hexo-Template.md",
-    "Template",
+    "_posts/第1课 深度学习推理框架基础.md",
+    "Templates/Hexo-Template.md",
+    "_posts/Mamba/A Gentle Introduction to HiPPO and its Friends.md",
+    "Templates",
     "_posts/Mamba/Mamba的出现.md",
     "_posts/Mamba/Mamba的前世今生.md",
     "_posts/Mamba/Mamba前置知识.md",
     "_posts/Mamba/README.md",
     "README.md",
-    "未命名.base",
-    "_posts/第1课 深度学习推理框架基础.md"
+    "未命名.base"
   ]
 }
