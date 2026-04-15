@@ -1,0 +1,96 @@
+{
+  "settings_version": "0.23.0",
+  "debug": false,
+  "obsidian_command_palette_prefix": "Execute: ",
+  "preview_variables_in_command_palette": true,
+  "show_autocomplete_menu": true,
+  "working_directory": "",
+  "default_shells": {},
+  "environment_variable_path_augmentations": {
+    "win32": "D:\\Program Files\\Nvidia\\CUDA\\v12.8\\bin;D:\\Program Files\\Nvidia\\CUDA\\v12.8\\libnvvp;;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files\\dotnet\\;D:\\Program Files\\Git\\cmd;D:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\Pandoc\\;D:\\Program Files\\ffmpeg-8.0-essentials_build\\ffmpeg-8.0-essentials_build\\bin;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\;F:\\texlive\\2025\\bin\\windows;C:\\Program Files (x86)\\EasyShare\\x86\\;C:\\Program Files (x86)\\EasyShare\\x64\\;C:\\Users\\31437\\.local\\bin;C:\\Users\\31437\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\31437\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\31437\\AppData\\Roaming\\npm;D:\\Program Files\\Programs\\cursor\\resources\\app\\bin"
+  },
+  "show_installation_warnings": true,
+  "error_message_duration": 20,
+  "notification_message_duration": 10,
+  "execution_notification_mode": "disabled",
+  "output_channel_clipboard_also_outputs_to_notification": true,
+  "output_channel_notification_decorates_output": true,
+  "enable_events": true,
+  "approve_modals_by_pressing_enter_key": true,
+  "command_palette": {
+    "re_execute_last_shell_command": {
+      "enabled": true,
+      "prefix": "Re-execute: "
+    }
+  },
+  "max_visible_lines_in_shell_command_fields": false,
+  "shell_commands": [
+    {
+      "id": "oeyeeivhoh",
+      "platform_specific_commands": {
+        "default": "#!/bin/bash\n\n# 请自行修改Hexo项目目录\nPROJECT_DIR=\"F:\\weblog\"\nPORT=4000\n\n# 切换到项目目录\nchcp 65001 >nul &&f: &&cd \"$PROJECT_DIR\" || { echo \"Failed to navigate to $PROJECT_DIR\"; exit 1; }\n\n# 清理生成的文件并启动Hexo服务器\nhexo clean\nkill -9 $(lsof -t -i:$PORT) 2>/dev/null\nhexo server &\n\n# 等待服务器启动\nwhile ! curl -s http://localhost:4000 > /dev/null; do\n  sleep 1\ndone\n\n# 打开浏览器\nopen \"http://localhost:$PORT\""
+      },
+      "shells": {},
+      "alias": "hexo-preview",
+      "icon": "lucide-send",
+      "confirm_execution": false,
+      "ignore_error_codes": [],
+      "input_contents": {
+        "stdin": null
+      },
+      "output_handlers": {
+        "stdout": {
+          "handler": "notification",
+          "convert_ansi_code": true
+        },
+        "stderr": {
+          "handler": "notification",
+          "convert_ansi_code": true
+        }
+      },
+      "output_wrappers": {
+        "stdout": null,
+        "stderr": null
+      },
+      "output_channel_order": "stdout-first",
+      "output_handling_mode": "buffered",
+      "execution_notification_mode": null,
+      "events": {},
+      "debounce": null,
+      "command_palette_availability": "enabled",
+      "preactions": [],
+      "variable_default_values": {}
+    }
+  ],
+  "prompts": [],
+  "builtin_variables": {},
+  "custom_variables": [],
+  "custom_variables_notify_changes_via": {
+    "obsidian_uri": true,
+    "output_assignment": true
+  },
+  "custom_shells": [
+    {
+      "id": "e93h5opnwb",
+      "name": "",
+      "description": "",
+      "binary_path": "",
+      "shell_arguments": [
+        "-c",
+        "{{!shell_command_content}}"
+      ],
+      "host_platform": "win32",
+      "host_platform_configurations": {
+        "win32": {
+          "quote_shell_arguments": true
+        }
+      },
+      "shell_platform": null,
+      "escaper": "PowerShell",
+      "path_translator": null,
+      "shell_command_wrapper": null,
+      "shell_command_test": null
+    }
+  ],
+  "output_wrappers": []
+}
