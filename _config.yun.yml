@@ -114,9 +114,6 @@ menu:
     - type: tags
       path: /tags/
       icon: ri:price-tag-3-line
-    - type: about
-      path: /about/
-      icon: fas fa-user-circle
   # 自定义内容你可以看云游君提供的文档
   # custom:
   #   title: 文档
@@ -185,6 +182,8 @@ engine_search:
   # href: "https://www.baidu.com/s?wd=site:"
   # href: "https://www.bing.com/search?q=site:"
   domain: 20020730.xyz
+local_search:
+  enable: fasle
 search:
   enable: true   # 开启弹窗搜索
   engine: local_search

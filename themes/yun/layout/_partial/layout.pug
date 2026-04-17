@@ -69,8 +69,8 @@ html(lang=config.language, class=theme.mode === 'dark' ? 'dark' : '')
     //- 🚑 核心补丁：找回搜索弹窗的底层逻辑
     //- 没有这一行，点击右上角放大镜图标不会有任何反应
 //- 🌟 终极大招：加载我们自己的定制搜索组件！
-    if theme.search && theme.search.enable
-      include ../_partial/my-search.pug
+
+    include ../_partial/my-search.pug
 
     //- 图片放大插件
     if theme.medium_zoom
