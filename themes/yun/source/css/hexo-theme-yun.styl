@@ -1,0 +1,332 @@
+// var
+@import '_variables/*';
+// mixin
+@import '_mixins/*';
+// global
+@import '_global';
+@import '_layout/*';
+// component
+@import '_components/*';
+@import '_components/*/*';
+// widget
+@import '_widget';
+// helper
+@import '_helper';
+// extend page
+@import '_extend/tags';
+
+if (hexo-config('albums.enable')) {
+  @import '_extend/albums';
+}
+
+if (hexo-config('girls.enable')) {
+  @import '_extend/girls';
+}
+
+// custom style
+if (hexo-config('custom.style')) {
+  @import '../../../' + hexo-config('custom.style');
+}
+/* ================================================= */
+/* 魔改：右侧独立目录样式 */
+/* ================================================= */
+/* ================================================= */
+/* 💎 终极稳定版：Valaxy 三栏卡片 + 悬浮菜单栏 Grid */
+/* (解决拉伸、偏右、不居中 BUG) */
+/* ================================================= */
+
+:root {
+  --my-card-bg: #ffffff;
+  --my-radius: 16px;
+  --my-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.08); 
+  --nav-height: 56px; /* 菜单栏高度 */
+}
+html.dark {
+  --my-card-bg: #1e1e20;
+  --my-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.4);
+}
+
+body:not(.is-home) {
+  /* 🚒 核心防御：彻底解决偏右！ */
+  /* 让 Hexo 原主题中那些定位混乱的 sidebar-toggle 滚出视野 */
+  .sidebar-toggle, #menu-btn { display: none !important; }
+
+  /* 消防大队长：强制撑开中间内容，拒绝变成面条 */
+  #content {
+    width: auto !important;
+    min-width: 0 !important; /* 终极防代码爆缸技巧 */
+    max-width: none !important; /* 让 Grid 网格来接管宽度，不许自己设定 */
+    padding: 40px 50px !important;
+  }
+
+  /* 🚒 核心：重新开启 Grid 网格布局，精确控制三栏比例与间距 */
+  @media screen and (min-width: 1200px) {
+    .container {
+      display: grid !important;
+      justify-content: center !important; /* 🚑 核心救命代码 1：强制整体居中！ */
+      
+      /* 定义严格的 Grid 网格：三列 (左280, 中自适应, 右260) */
+      grid-template-columns: 280px minmax(0, 1fr) 260px !important;
+      
+      /* 定义行：第一行放菜单栏，第二行放三栏卡片 */
+      grid-template-rows: auto auto !important;
+      
+      gap: 30px !important; /* 卡片之间完美的 30px 呼吸间距 */
+      max-width: 1450px !important; /* 整体居中的最大宽度 */
+      margin: 60px auto !important; /* ⬆️ 整体下移 60px，并自动居中 */
+      padding: 0 20px !important;
+      align-items: start;
+    }
+
+    /* 🚑 核心救命代码 2：拯救页脚，让它横跨三栏沉在最底下 */
+    footer, #footer {
+      grid-column: 1 / -1;
+      grid-row: 3 !important; /* 页脚在第三行 */
+      margin-top: 40px !important;
+    }
+  }
+
+  /* =============================================== */
+  /* 🛠️ 精装修 1：左侧边栏 (卡片化) */
+  /* =============================================== */
+  .sidebar {
+    grid-column: 1 !important;
+    grid-row: 2 !important; /* 在第二行 */
+    position: sticky !important; /* 滑动时吸顶 */
+    top: 136px !important; /* ⬇️ 整体下移后，吸顶距离从 40px 改为 136px (下移60 + 菜单56 + 间距20) */
+    background: var(--my-card-bg) !important;
+    border-right: none !important;
+    border-radius: var(--my-radius) !important;
+    box-shadow: var(--my-shadow) !important;
+    padding: 30px 20px !important;
+    margin: 0 !important;
+    width: auto !important;
+    opacity: 1 !important;
+  }
+
+  /* =============================================== */
+  /* 🛠️ 精装修 2：中间主内容区 (卡片化) */
+  /* =============================================== */
+  #content {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    background: var(--my-card-bg) !important;
+    border-radius: var(--my-radius) !important;
+    box-shadow: var(--my-shadow) !important;
+    margin: 0 !important; 
+    opacity: 1 !important;
+  }
+
+  /* =============================================== */
+  /* 🛠️ 精装修 3：右侧目录区 (卡片化) */
+  /* =============================================== */
+  .right-sidebar {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    position: sticky;
+    top: 136px !important; /* ⬇️ 同步往下移到 136px */
+    background: var(--my-card-bg) !important;
+    border-radius: var(--my-radius) !important;
+    box-shadow: var(--my-shadow) !important;
+    padding: 24px;
+    margin: 0 !important;
+    max-height: calc(100vh - 160px); /* 适应下移后的高度 */
+    overflow-y: auto;
+    opacity: 1 !important;
+  }
+
+  /* --- 💎 彻底重写丑陋目录为灰细精致版 --- */
+  .right-sidebar::before {
+    content: "目录";
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--hty-text-color);
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(150, 150, 150, 0.3);
+  }
+  .right-sidebar ol, .right-sidebar ul { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
+  .right-sidebar .toc-number { display: none !important; }
+  .right-sidebar .toc-child { padding-left: 15px !important; }
+  .right-sidebar li.toc-item { margin-bottom: 10px !important; line-height: 1.4 !important; }
+  .right-sidebar a.toc-link {
+    font-size: 0.9rem !important;
+    color: var(--hty-text-color) !important;
+    opacity: 0.7; /* 默认半透明，变灰变精致 */
+    text-decoration: none !important;
+    border-bottom: none !important;
+    display: block;
+    transition: all 0.2s ease;
+  }
+  .right-sidebar a.toc-link:hover, .right-sidebar a.toc-link.active {
+    opacity: 1;
+    color: var(--hty-primary-color) !important;
+    transform: translateX(3px); /* 悬浮时带一点点可爱的右移效果 */
+  }
+
+}
+
+/* 手机端降级防御（屏幕变小时自动变成竖排单列） */
+@media screen and (max-width: 1199px) {
+  body:not(.is-home) .container {
+    display: block !important;
+    padding: 0 15px !important;
+    margin-top: 20px !important;
+  }
+  /* 手机端暂时隐藏菜单栏和右侧目录，避免挤爆屏幕 */
+  .nav-bar, .right-sidebar { display: none !important; }
+  
+  body:not(.is-home) .sidebar {
+    position: relative !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 20px auto !important;
+  }
+  body:not(.is-home) #content {
+    margin: 20px 0 !important;
+    padding: 20px !important;
+  }
+}
+/* ================================================= */
+/* 🌟 Valaxy 风格：顶部毛玻璃通栏导航 */
+/* ================================================= */
+
+.valaxy-nav {
+  position: fixed; /* 固定在顶部 */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* 导航栏高度 */
+  
+  /* 核心：半透明 + 毛玻璃效果 */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 1000; /* 保证在所有元素最上层 */
+  transition: all 0.3s ease;
+}
+
+/* 深色模式下的毛玻璃 */
+html.dark .valaxy-nav {
+  background: rgba(30, 30, 32, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 布局：强制左右等宽，增加图标之间的呼吸间距 */
+.valaxy-nav .nav-left, 
+.valaxy-nav .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px; /* ⬆️ 间距从 18px 增加到 24px */
+  flex: 1; 
+}
+
+/* 中间标题样式 */
+.valaxy-nav .nav-center {
+  flex: 0 0 auto;
+}
+.valaxy-nav .site-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--hty-text-color);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+/* 图标按钮样式 */
+/* 图标按钮样式：放大图标 */
+.valaxy-nav .nav-item {
+  color: var(--hty-text-color);
+  font-size: 1.5rem !important; /* ⬆️ 图标字号从 1.25rem 放大到 1.5rem */
+  opacity: 0.6;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.valaxy-nav .nav-item:hover {
+  opacity: 1;
+  color: var(--hty-primary-color);
+  transform: scale(1.15); /* ⬆️ 悬浮放大效果更明显一点 */
+}
+/* 如果你的菜单里不仅有图标，还有文字，文字也要相应调大一点点 */
+.valaxy-nav .nav-item span {
+  font-size: 1rem;
+  margin-left: 6px;
+}
+
+/* 手机端隐藏中间标题，保证图标不挤 */
+@media screen and (max-width: 768px) {
+  .valaxy-nav .nav-center { display: none; }
+}
+
+/* ================================================= */
+/* 🛠️ 配合顶部导航，微调下方卡片的位置 */
+/* ================================================= */
+body:not(.is-home) {
+  /* 整体容器往下让出 60px 的导航栏空间 + 30px 留白 */
+  @media screen and (min-width: 1200px) {
+    .container {
+      margin-top: 90px !important; 
+    }
+  }
+  
+  /* 侧边栏吸顶位置也要同步下移，避免被导航栏挡住 */
+  .sidebar, .right-sidebar {
+    top: 90px !important; 
+  }
+}
+/* ================================================= */
+/* 🚑 强力补丁：强制放大导航栏图标并修复拥挤 */
+/* ================================================= */
+
+/* 1. 强制左右两边等宽，并让中间标题绝对居中 */
+.valaxy-nav .nav-left, 
+.valaxy-nav .nav-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important; /* 图标之间的间距加大 */
+  flex: 1 1 0% !important; /* 强制平分两侧空间 */
+}
+.valaxy-nav .nav-right {
+  justify-content: flex-end !important; /* 右侧图标靠右对齐 */
+}
+.valaxy-nav .nav-center {
+  flex: 0 0 auto !important; /* 中间标题乖乖呆在正中间 */
+  margin: 0 auto !important;
+}
+
+/* 2. 暴力控制 SVG 图标的大小！ */
+.valaxy-nav .nav-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px !important; /* 增加一点点击区域 */
+}
+
+.valaxy-nav .nav-item svg {
+  width: 1.6rem !important;  /* 👈 这里直接控制图标的物理宽度，变大！ */
+  height: 1.6rem !important; /* 👈 控制高度，变大！ */
+  stroke-width: 1.5 !important; /* 让线条稍微粗一点，更饱满 */
+}
+
+/* 如果你的菜单带有文字，让文字也跟着稍微大一点 */
+.valaxy-nav .nav-item span {
+  font-size: 1.05rem !important;
+  margin-left: 6px !important;
+}
+
+/* 博客标题字体也稍微大一点 */
+.valaxy-nav .site-name {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}

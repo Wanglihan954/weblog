@@ -1,0 +1,32 @@
+//- themes/yun/layout/_partial/nav.pug
+//- Valaxy 风格的顶部毛玻璃通栏导航
+
+nav.valaxy-nav
+  //- 1. 左侧：图标菜单
+  .nav-left
+    a.nav-item(href=url_for('/'), title=__('menu.home'))
+      +icon('ri:home-4-line')
+    if theme.menu && theme.menu.list
+      for item, name in theme.menu.list
+        - var title = item.title || __('menu.' + (item.type || name))
+        a.nav-item(href=url_for(item.path), title=title)
+          if item.icon
+            +icon(item.icon)
+          else
+            span= title
+
+  //- 2. 中间：博客标题
+  .nav-center
+    a.site-name(href=url_for('/'))= config.title
+
+  //- 3. 右侧：功能按钮 (翻译、暗黑模式、搜索等)
+  .nav-right
+    if theme.mode !== 'auto'
+      a#toggle-mode-btn.nav-item(href='javascript:;', title="切换主题")
+        +icon('ri:contrast-2-line')
+    
+    //- 如果你开启了本地搜索
+    if theme.search && theme.search.enable
+      //- 这里的 popup-trigger 就是唤醒搜索弹窗的开门暗号！
+      a.nav-item.popup-trigger(href='javascript:;', title="搜索")
+        +icon('ri:search-line')

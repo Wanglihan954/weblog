@@ -1,0 +1,81 @@
+/* =========================================
+   Yun 主题自定义：三栏布局 (左侧个人、中间文章、右侧目录)
+   ========================================= */
+
+/* 设置网页整体背景渐变 */
+body {
+  background: linear-gradient(135deg, #e0f7fa 0%, #f5f7fa 100%) !important;
+}
+
+/* -----------------------------------------
+   仅在宽屏（PC端）生效，保护手机端原有体验
+   ----------------------------------------- */
+@media (min-width: 1300px) {
+  
+  /* 1. 隐藏左侧边栏原有的切换按钮（因为现在都要显示，不需要切换了） */
+  .sidebar-nav {
+    display: none !important;
+  }
+
+  /* 2. 强制同时显示“个人信息”和“文章目录”面板 */
+  .site-overview-wrap,
+  .post-toc-wrap {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important; 
+  }
+
+  /* 3. 设置中间文章主体容器：居中、定宽、卡片化 */
+  #main-inner {
+    width: 100% !important;
+    max-width: 820px !important; /* 文章主体最大宽度，可自行调整 */
+    margin: 0 auto !important;
+  }
+  #content {
+    background-color: #fff !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+    padding: 40px !important;
+  }
+
+  /* 4. 设置左侧“个人信息”卡片 */
+  .sidebar {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .site-overview-wrap {
+    position: fixed !important;
+    top: 80px !important; /* 距离页面顶部的高度 */
+    /* 核心定位公式：50%(屏幕中央) - 410px(半个文章宽) - 20px(间距) - 260px(卡片宽) */
+    left: calc(50% - 690px) !important; 
+    width: 260px !important;
+    background-color: #fff !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+    padding: 20px !important;
+  }
+
+  /* 5. 设置右侧“文章目录”卡片（强行从左侧抽离并固定到右边） */
+  .post-toc-wrap {
+    position: fixed !important;
+    top: 80px !important;
+    /* 核心定位公式：50%(屏幕中央) + 410px(半个文章宽) + 20px(间距) */
+    left: calc(50% + 430px) !important; 
+    width: 260px !important;
+    background-color: #fff !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+    padding: 20px !important;
+    max-height: calc(100vh - 120px) !important; /* 防止目录太长超出屏幕 */
+    overflow-y: auto !important; /* 目录过长时允许内部滚动 */
+    z-index: 99;
+  }
+
+  /* 隐藏文章自带的阴影，避免和我们加的冲突 */
+  .post-block {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}

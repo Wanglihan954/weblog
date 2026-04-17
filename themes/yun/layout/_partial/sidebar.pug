@@ -1,0 +1,69 @@
+a#menu-btn.sidebar-toggle.hty-icon-button
+  .hamburger(class='hamburger--spin' type='button')
+    span.hamburger-box
+      span.hamburger-inner
+
+.sidebar-toggle.sidebar-overlay
+
+aside.sidebar
+  //- 保留侧边栏控制脚本（用于手机端左侧边栏的弹出展开）
+  script(src=url_for(theme.cdn.pre + '/js/sidebar.js'), type='module')
+  
+  //- 移除了 sidebar-panel 类名，让概览信息始终显示
+  #site-overview-wrap
+    include ./sidebar/info.pug
+
+    nav.site-state
+      a.site-state-item.hty-icon-button.icon-home(href=url_for(theme.menu.home.path), title=theme.menu.home.title || __('menu.home'))
+        span.site-state-item-icon
+          +icon(theme.menu.home.icon)
+
+      for item in theme.menu.list
+        if item.type === 'archives'
+          - item.title = item.title || __('menu.archives')
+          - item.count = site.posts.length
+        else if item.type === 'categories'
+          - item.title = item.title || __('menu.categories')
+          - item.count = site.categories.length
+        else if item.type === 'tags'
+          - item.title = item.title || __('menu.tags')
+          - item.count = site.tags.length
+        .site-state-item
+          a(href=url_for(item.path), title=item.title)
+            span.site-state-item-icon
+              +icon(item.icon)
+            if item.count !== undefined
+              span.site-state-item-count!=item.count
+
+      if theme.menu.custom
+        a.site-state-item.hty-icon-button(href=url_for(theme.menu.custom.path), title=theme.menu.custom.title)
+          span.site-state-item-icon
+            +icon(theme.menu.custom.icon)
+
+    hr(style="margin-bottom:0.5rem")
+    if theme.social
+      .links-of-author
+        for social in theme.social
+          if social.color === 'black'
+            - social.color = 'var(--hty-text-color)'
+          a.links-of-author-item.hty-icon-button(rel='noopener' href=social.link, title=social.name, target='_blank' style='color:' + social.color)
+            +icon(social.icon)
+
+    if theme.pages
+      hr(style="margin:0.5rem 1rem")
+      .links
+        for link in theme.pages
+          a.links-item.hty-icon-button(href=url_for(link.url), title=link.name, style='color:' + link.color)
+            +icon(link.icon)
+
+    if theme.mode === 'auto' || theme.mode === "time"
+      br
+      a#toggle-mode-btn.links-item.hty-icon-button(href='javascript:;' title="Mode" style='color: #f1cb64')
+        +icon('ri:contrast-2-line')
+
+  //- 标签云（如果你开启了的话）
+  if theme.sidebar.tagcloud.enable
+    .tag-cloud
+      - var start_color = theme.colors.tag_start_color || '#333'
+      - var end_color = theme.colors.tag_end_color || theme.colors.primary
+      .tag-cloud-tags!= tagcloud({min_font: 12, max_font: 30, amount: theme.sidebar.tagcloud.amount, color: true, start_color, end_color})

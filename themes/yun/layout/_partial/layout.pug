@@ -1,0 +1,77 @@
+- var title = (__('title') !== 'title' && __('title')) || config.title
+- var author = config.author + (config.email ? ',' + config.email : '')
+- var copyright = config.copyright || config.author
+
+doctype html
+html(lang=config.language, class=theme.mode === 'dark' ? 'dark' : '')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(name='theme-color', content=theme.colors.primary)
+    meta(name='author' content=author)
+    meta(name="copyright" content=copyright)
+    !=meta_generator()
+    meta(name='theme' content="hexo-theme-yun")
+    - page_title(page)
+    if page.title
+      title=page.title + ' | ' + title
+    else
+      title=title
+    include ../_third-party/cdn.pug
+    include head.pug
+    include extended.pug
+    block preconnect
+    script.
+      (function() {
+        if (CONFIG.mode !== 'auto') return
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        const setting = localStorage.getItem('darken-mode') || 'auto'
+        if (setting === 'dark' || (prefersDark && setting !== 'light'))
+          document.documentElement.classList.toggle('dark', true)
+      })()
+  body(class= is_home() ? 'is-home' : '')
+    //- 全局 Mixins
+    include ../_mixin/index.pug
+    
+    if page.iconify || theme.iconify.global
+      include ../_third-party/iconify.pug
+
+    //- 背景层
+    include background.pug
+    
+    //- 1. 顶部全屏通栏导航栏 (只在非首页显示)
+    if !is_home()
+      include nav.pug
+
+    //- 2. 主体三栏容器
+    .container
+      //- 左侧边栏 (已魔改为纯概览卡片)
+      include sidebar.pug
+      
+      //- 中间内容区
+      main#content.sidebar-translate
+        block content
+
+        if is_post() || is_page()
+          if page.comments && theme.comment.enable
+            include ../_third-party/comments/index.pug
+      
+      //- 3. 右侧目录卡片 (独立组件)
+      include right-toc.pug
+
+      //- 页脚
+      include footer.pug
+    
+    //- 侧边小挂件
+    include ../_widget/index.pug
+
+    //- 🚑 核心补丁：找回搜索弹窗的底层逻辑
+    //- 没有这一行，点击右上角放大镜图标不会有任何反应
+//- 🌟 终极大招：加载我们自己的定制搜索组件！
+    if theme.search && theme.search.enable
+      include ../_partial/my-search.pug
+
+    //- 图片放大插件
+    if theme.medium_zoom
+      include ../_third-party/medium-zoom.pug

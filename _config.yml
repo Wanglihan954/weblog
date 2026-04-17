@@ -60,7 +60,7 @@ relative_link: false
 future: true
 syntax_highlighter: highlight.js
 highlight:
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -124,6 +124,7 @@ aplayer:
   style_cdn: https://cdn.jsdelivr.net/npm/aplayer@latest/dist/APlayer.min.css
   meting: true
   meting_cdn: https://cdn.jsdelivr.net/npm/meting@1/dist/Meting.min.js
+
 footer:
   live_time:
     enable: false
@@ -147,3 +148,8 @@ mathjax:
   extension_options: {}
     # you can put your extension options here
     # see http://docs.mathjax.org/en/latest/options/input/tex.html#tex-extension-options for more detail
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000

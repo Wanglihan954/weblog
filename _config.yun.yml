@@ -180,11 +180,14 @@ comment:
 
 medium_zoom: true
 engine_search:
-  enable: true
+  enable: false
   href: 'https://www.google.com/search?q=site:'
   # href: "https://www.baidu.com/s?wd=site:"
   # href: "https://www.bing.com/search?q=site:"
   domain: 20020730.xyz
+search:
+  enable: true   # 开启弹窗搜索
+  engine: local_search
 katex:
   copy_tex: true
   global: true
@@ -194,3 +197,6 @@ katex:
   output: "htmlAndMathml",
   displayMode: true,
   trust: true }
+# 在配置文件中找到或添加这段代码
+custom_css:
+  - <link rel="stylesheet" href="/css/custom_theme.css"> # 添加这一行

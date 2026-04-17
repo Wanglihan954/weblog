@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "473520aebd1a28ed",
+        "id": "cf13eb35468f116e",
         "type": "tabs",
         "children": [
           {
-            "id": "1026629aa2350c03",
+            "id": "ef9b3808f4f60201",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/Github学生优惠获取教程.md",
-                "mode": "source",
-                "source": true
+                "file": "_posts/第3课 计算图的设计.md",
+                "mode": "preview",
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "Github学生优惠获取教程"
+              "title": "第3课 计算图的设计"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Template/Hexo-Template.md",
+                "file": "_posts/Test.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Hexo-Template 的反向链接列表"
+              "title": "Test 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Template/Hexo-Template.md",
+                "file": "_posts/Test.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Hexo-Template 的出链列表"
+              "title": "Test 的出链列表"
             }
           },
           {
@@ -184,236 +184,6 @@
               "icon": "git-pull-request",
               "title": "Source Control"
             }
-          },
-          {
-            "id": "da3623a78d41cbff",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "ca31c54a9889af94",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "19b84708bb938590",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "1be5f116313803bd",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "d33329c149e54226",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "5057b793562b6be9",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "7a1917d8aaa8c23b",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "d3965615f23b9384",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "7a833cb87c4bc93f",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "dcf8495904ac78dd",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "7c206782970d8b19",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "3521de288cb1ec79",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "38a3ff205fc80454",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "6d7aa48992ce3a55",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "52fef373c764aca3",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "5fcd4f7a9804b840",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "22b8b179df42211b",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "c8da3b1b3dae3523",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "81d69dc9f2693809",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "7d1d943cd4a5bf1a",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "69954c484a9494d4",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "88e71b39f9e983ab",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
-          },
-          {
-            "id": "1b5cc26daaedc0b1",
-            "type": "leaf",
-            "state": {
-              "type": "SC-custom-variables-view",
-              "state": {},
-              "icon": "code-glyph",
-              "title": "Shell commands: Custom variables"
-            }
           }
         ],
         "currentTab": 6
@@ -434,27 +204,38 @@
       "obsidian42-brat:BRAT": false,
       "templater-obsidian:Templater": false,
       "table-editor-obsidian:Advanced Tables Toolbar": false,
-      "obsidian-git:Open Git source control": false,
-      "obsidian-shellcommands:Shell commands: Custom variables": false
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "4965700aa34dc55c",
   "lastOpenFiles": [
-    "Templates/Hexo-Template.md",
-    "_posts/未命名.md",
-    "_posts/webo.md",
-    "_posts/hello-world.md",
-    "_posts/Github学生优惠获取教程.md",
-    "_posts/文件.md",
-    "_posts/显微镜.md",
+    "_posts/第3课 计算图的设计.md",
+    "_posts/Ubuntu个性化/Ubuntu 24.04 LTS 安装后必干的20件事.md",
     "_posts/第1课 深度学习推理框架基础.md",
+    "Templates/Hexo-Template.md",
+    "_posts/Github学生优惠获取教程.md",
+    "_posts/第4课 计算图的构建.md",
+    "_posts/Ubuntu个性化/输入法.md",
+    "_posts/Ubuntu个性化/截屏.md",
+    "_posts/Ubuntu个性化/WSL2 一键设置代理.md",
+    "_posts/Ubuntu个性化/WPS for Linux 字体配置(字体缺失解决办法).md",
+    "_posts/Ubuntu个性化/Git使用ssh连接.md",
+    "_posts/Ubuntu个性化",
+    "_posts/Mamba/Mamba的前世今生.md",
+    "_posts/Mamba/Mamba的出现.md",
+    "_posts/Mamba/Mamba前置知识.md",
     "_posts/Mamba/A Gentle Introduction to HiPPO and its Friends.md",
     "Templates",
-    "_posts/Mamba/Mamba的出现.md",
-    "_posts/Mamba/Mamba的前世今生.md",
-    "_posts/Mamba/Mamba前置知识.md",
+    "Template/Hexo-Template.md",
+    "Template",
+    "categories/index.md",
+    "_posts/第2课 张量的设计.md",
+    "_posts/第5课 算子和算子注册器的设计与实现.md",
+    "_posts/hello-world.md",
+    "_posts/Test.md",
     "_posts/Mamba/README.md",
-    "README.md",
-    "未命名.base"
+    "未命名.md",
+    "未命名.base",
+    "README.md"
   ]
 }
