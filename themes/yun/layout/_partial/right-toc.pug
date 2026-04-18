@@ -1,0 +1,11 @@
+- var display_toc = typeof page.toc === 'undefined' ? is_post() : page.toc
+
+if display_toc
+  - var toc_content = toc(page.content, {list_number: theme.toc.list_number, max_depth: theme.toc.max_depth, min_depth: theme.toc.min_depth})
+  
+  aside.right-sidebar
+    //- 强制设为显示和透明度为1
+    #post-toc-wrap(style="display:block; opacity:1; visibility:visible;")
+      .post-toc
+        .post-toc-content
+          != toc_content.length > 1 ? toc_content : theme.toc.placeholder || __('post.toc_empty')

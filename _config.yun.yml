@@ -114,9 +114,6 @@ menu:
     - type: tags
       path: /tags/
       icon: ri:price-tag-3-line
-    - type: about
-      path: /about/
-      icon: fas fa-user-circle
   # 自定义内容你可以看云游君提供的文档
   # custom:
   #   title: 文档
@@ -158,3 +155,47 @@ scrollreveal:
   targets:
     - .post-card
     - .markdown-body img
+utterances:
+  enable: true
+  repo: Wanglihan954/disscussion
+  issue-term: pathname
+  label: comment
+  theme: github-light
+waline:
+  enable: true
+  serverURL: https://waline2333-ten.vercel.app
+  visitor: true
+  comment: true
+comment:
+  enable: true
+  tips:
+    - 若您想及时得到回复提醒，建议跳转 GitHub Issues 评论。
+    - 若没有本文 Issue，您可以使用 Comment 模版新建。
+  candidates:
+    - waline
+    - utterances
+
+medium_zoom: true
+engine_search:
+  enable: false
+  href: 'https://www.google.com/search?q=site:'
+  # href: "https://www.baidu.com/s?wd=site:"
+  # href: "https://www.bing.com/search?q=site:"
+  domain: 20020730.xyz
+local_search:
+  enable: fasle
+search:
+  enable: true   # 开启弹窗搜索
+  engine: local_search
+katex:
+  copy_tex: true
+  global: true
+  options: {
+  renderMathInElement: true, 
+  strict: "ignore", 
+  output: "htmlAndMathml",
+  displayMode: true,
+  trust: true }
+# 在配置文件中找到或添加这段代码
+custom_css:
+  - <link rel="stylesheet" href="/css/custom_theme.css"> # 添加这一行

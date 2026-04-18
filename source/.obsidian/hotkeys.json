@@ -1,0 +1,16 @@
+{
+  "templater-obsidian:jump-to-next-cursor-location": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": " "
+    },
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "`"
+    }
+  ]
+}
