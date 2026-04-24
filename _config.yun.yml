@@ -24,7 +24,7 @@ fireworks:
     - '33, 78, 194'
 banner:
   enable: true
-  title: 让梦成为可能
+  title: 世界需要七休日
   border: true
   cloud:
     enable: true

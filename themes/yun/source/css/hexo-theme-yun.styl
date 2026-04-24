@@ -23,14 +23,12 @@ if (hexo-config('girls.enable')) {
   @import '_extend/girls';
 }
 
-// custom style
 if (hexo-config('custom.style')) {
   @import '../../../' + hexo-config('custom.style');
 }
 
 /* ================================================= */
-/* 💎 终极版：Valaxy 风格三栏卡片 + 毛玻璃悬浮通栏导航 */
-/* (已清理所有重复冗余代码，完美居中，字体绝对统一) */
+/* 💎 究极版：完美三栏 + APP级侧滑抽屉 + 像素级排版 */
 /* ================================================= */
 
 :root {
@@ -38,457 +36,287 @@ if (hexo-config('custom.style')) {
   --my-radius: 16px;
   --my-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.08);
   --nav-height: 60px;
+  --font-family-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  --font-family-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif !important;
+  --my-text-body: #2c3e50;
+  --my-text-heading: #1a1a1a;
+  --my-text-quote: #6a737d;
+  --my-quote-bg: rgba(150, 150, 150, 0.05);
+  --my-border-color: rgba(150, 150, 150, 0.15);
 }
+
 html.dark {
   --my-card-bg: #1e1e20;
   --my-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.4);
+  --my-text-body: #c9d1d9;
+  --my-text-heading: #e6edf3;
+  --my-text-quote: #8b949e;
+  --my-quote-bg: rgba(255, 255, 255, 0.05);
+  --my-border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* =============================================== */
-/* 🌟 1. 顶部毛玻璃通栏导航栏 (.valaxy-nav) */
+/* 🌟 1. 顶部通栏导航栏 */
 /* =============================================== */
 .valaxy-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--nav-height);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 0 24px;
-  z-index: 1000;
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height);
+  background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 0 24px; 
+  z-index: 3000 !important; /* 确保导航栏在最顶层 */
   transition: all 0.3s ease;
-  
-  /* 👇 核心修复：使用 Grid 强制绝对对称，天王老子来了也挤不歪 */
-  display: grid !important;
-  grid-template-columns: 1fr auto 1fr !important; /* 左右两边各1等份，中间自适应 */
-  align-items: center !important;
+  display: grid !important; grid-template-columns: 1fr auto 1fr !important; align-items: center !important;
 }
-html.dark .valaxy-nav {
-  background: rgba(30, 30, 32, 0.7);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
+html.dark .valaxy-nav { background: rgba(30, 30, 32, 0.7); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-/* --- 导航栏左右布局：分别靠左右对齐 --- */
-.valaxy-nav .nav-left,
-.valaxy-nav .nav-right {
-  display: flex !important;
-  align-items: center !important;
-  gap: 20px !important;
-}
+.valaxy-nav .nav-left, .valaxy-nav .nav-right { display: flex !important; align-items: center !important; gap: 20px !important; }
 .valaxy-nav .nav-left { justify-content: flex-start !important; }
 .valaxy-nav .nav-right { justify-content: flex-end !important; }
 
-/* --- 导航栏中间标题：解除旧封印，完美融入网格 --- */
 .valaxy-nav .nav-center {
-  position: static !important; /* 废弃容易出 bug 的绝对定位 */
-  transform: none !important;
-  width: auto !important; /* 让它根据文字自然撑开 */
-  min-width: 300px; /* 给标题留足呼吸空间 */
-  height: var(--nav-height) !important;
-  overflow: hidden !important;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 0 !important;
-  padding: 0 !important;
+  position: static !important; transform: none !important; width: auto !important; min-width: 300px;
+  height: var(--nav-height) !important; overflow: hidden !important; display: flex; justify-content: center;
+  align-items: flex-start; margin: 0 !important; padding: 0 !important;
 }
-.nav-title-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  transform: translateY(0);
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.nav-center.show-article-title .nav-title-wrapper {
-  transform: translateY(-60px); 
-}
+.nav-title-wrapper { display: flex; flex-direction: column; width: 100%; transform: translateY(0); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.nav-center.show-article-title .nav-title-wrapper { transform: translateY(-60px); }
 
-/* --- 网站名 & 文章标题字体 --- */
-.valaxy-nav .site-name,
-.valaxy-nav .article-title {
-  height: var(--nav-height);
-  line-height: var(--nav-height);
-  display: block;
-  text-align: center !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
-  font-family: var(--font-family-serif, serif) !important; 
-  font-size: 1.15rem !important;
-  font-weight: bold !important;
-  letter-spacing: 2px !important;
-  color: var(--hty-text-color) !important;
-  text-decoration: none !important;
+.valaxy-nav .site-name, .valaxy-nav .article-title {
+  height: var(--nav-height); line-height: var(--nav-height); display: block; text-align: center !important;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; margin: 0 !important; padding: 0 !important;
+  font-family: var(--font-family-serif) !important; font-size: 1.15rem !important; font-weight: bold !important;
+  letter-spacing: 2px !important; color: var(--my-text-heading) !important; text-decoration: none !important;
 }
-.valaxy-nav .article-title {
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
+.valaxy-nav .article-title { cursor: pointer; transition: opacity 0.3s ease; }
 .valaxy-nav .article-title:hover { opacity: 0.6; }
 
-/* --- 导航栏图标按钮精细化 --- */
 .valaxy-nav .nav-item {
-  color: var(--hty-text-color);
-  font-size: 1.5rem !important;
-  opacity: 0.6;
-  transition: all 0.2s;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 5px !important;
+  color: var(--my-text-body); font-size: 1.5rem !important; opacity: 0.6; transition: all 0.2s;
+  display: inline-flex !important; align-items: center !important; justify-content: center !important; padding: 5px !important;
 }
-.valaxy-nav .nav-item:hover {
-  opacity: 1;
-  color: var(--hty-primary-color);
-  transform: scale(1.15);
-}
-.valaxy-nav .nav-item svg {
-  width: 1.6rem !important;
-  height: 1.6rem !important;
-  stroke-width: 1.5 !important;
-}
-.valaxy-nav .nav-item span {
-  font-size: 1.05rem !important;
-  margin-left: 6px !important;
-}
+.valaxy-nav .nav-item:hover { opacity: 1; color: var(--hty-primary-color); transform: scale(1.15); }
+.valaxy-nav .nav-item svg { width: 1.6rem !important; height: 1.6rem !important; stroke-width: 1.5 !important; }
+.valaxy-nav .nav-item span { font-size: 1.05rem !important; margin-left: 6px !important; }
+
 /* =============================================== */
-/* 🏗️ 2. 全局防干扰清理 */
+/* 🏗️ 2. 全局排版与 Grid 三栏卡片 */
 /* =============================================== */
 body:not(.is-home) {
-  /* 隐藏原主题会干扰排版的自带侧边栏按钮和废弃按钮 */
-  .sidebar-toggle, #menu-btn, .sidebar #toggle-mode-btn { display: none !important; }
+  #menu-btn, .sidebar #toggle-mode-btn { display: none !important; }
 
-  /* =============================================== */
-  /* 📐 3. Grid 三栏卡片网格布局 */
-  /* =============================================== */
   @media screen and (min-width: 1200px) {
     .container {
-      display: grid !important;
-      justify-content: center !important;
-      grid-template-columns: 280px minmax(0, 1fr) 260px !important;
-      grid-template-rows: auto auto !important;
-      gap: 30px !important;
-      max-width: 85vw !important;
-      margin: 90px auto 40px auto !important; /* 顶部让出导航栏高度 */
-      padding: 0 20px !important;
-      align-items: start;
+      display: grid !important; justify-content: center !important;
+      grid-template-columns: 280px minmax(0, 1fr) 260px !important; grid-template-rows: auto auto !important;
+      gap: 20px !important; max-width: 95vw !important; margin: 90px auto 40px auto !important;
+      padding: 0 20px !important; align-items: start;
     }
-
-    /* 拯救页脚：跨越三栏沉底 */
-    footer, #footer {
-      grid-column: 1 / -1;
-      grid-row: 3 !important;
-      margin-top: 40px !important;
-    }
+    footer, #footer { grid-column: 1 / -1; grid-row: 3 !important; margin-top: 40px !important; }
   }
 
-  /* 核心卡片 1：中间主内容区 */
   #content {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    background: var(--my-card-bg) !important;
-    border-radius: var(--my-radius) !important;
-    box-shadow: var(--my-shadow) !important;
-    padding: 40px 50px !important;
-    margin: 0 !important;
-    opacity: 1 !important;
+    grid-column: 2 !important; grid-row: 2 !important; width: 100% !important; min-width: 0 !important; max-width: none !important;
+    box-sizing: border-box !important; background: var(--my-card-bg) !important; border-radius: var(--my-radius) !important;
+    box-shadow: var(--my-shadow) !important; padding: 40px 30px !important; margin: 0 !important;
   }
 
-  /* 核心卡片 2：左侧边栏 */
   .sidebar {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    position: sticky !important;
-    top: 90px !important; /* 吸顶距离完美对接导航栏 */
-    background: var(--my-card-bg) !important;
-    border-right: none !important;
-    border-radius: var(--my-radius) !important;
-    box-shadow: var(--my-shadow) !important;
-    padding: 30px 20px !important;
-    margin: 0 !important;
-    width: auto !important;
-    opacity: 1 !important;
+    grid-column: 1 !important; grid-row: 2 !important; position: sticky !important; top: 90px !important;
+    box-sizing: border-box !important; background: var(--my-card-bg) !important; border-right: none !important;
+    border-radius: var(--my-radius) !important; box-shadow: var(--my-shadow) !important; padding: 30px 20px !important;
+    margin: 0 !important; width: auto !important;
   }
 }
 
-/* 核心卡片 3：右侧目录区 */
+/* 电脑端右侧目录 */
 .right-sidebar {
-  grid-column: 3 !important;
-  grid-row: 2 !important;
-  position: sticky;
-  top: 90px !important;
-  background: var(--my-card-bg) !important;
-  border-radius: var(--my-radius) !important;
-  box-shadow: var(--my-shadow) !important;
-  padding: 24px;
-  margin: 0 !important;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  opacity: 1 !important;
+  grid-column: 3 !important; grid-row: 2 !important; position: sticky; top: 90px !important;
+  box-sizing: border-box !important; background: var(--my-card-bg) !important; border-radius: var(--my-radius) !important;
+  box-shadow: var(--my-shadow) !important; padding: 20px 16px; margin: 0 !important; max-height: calc(100vh - 120px); overflow-y: auto;
 }
-
-/* --- 彻底重写右侧目录样式：灰细精致版 --- */
 .right-sidebar::before {
-  content: "文章目录";
-  display: block;
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--hty-text-color);
-  text-align: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px dashed rgba(150, 150, 150, 0.3);
+  content: "文章目录"; display: block; font-size: 1rem; font-weight: bold; color: var(--my-text-heading);
+  text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed var(--my-border-color);
 }
 .right-sidebar ol, .right-sidebar ul { list-style: none !important; padding-left: 0 !important; margin: 0 !important; }
 .right-sidebar .toc-number { display: none !important; }
 .right-sidebar .toc-child { padding-left: 15px !important; }
 .right-sidebar li.toc-item { margin-bottom: 10px !important; line-height: 1.4 !important; }
 .right-sidebar a.toc-link {
-  font-size: 0.9rem !important;
-  color: var(--hty-text-color) !important;
-  opacity: 0.7;
-  text-decoration: none !important;
-  border-bottom: none !important;
-  display: block;
-  transition: all 0.2s ease;
+  font-size: 0.9rem !important; color: var(--my-text-body) !important; opacity: 0.7; text-decoration: none !important;
+  border-bottom: none !important; display: block; transition: all 0.2s ease;
 }
-.right-sidebar a.toc-link:hover, .right-sidebar a.toc-link.active {
-  opacity: 1;
-  color: var(--hty-primary-color) !important;
-  transform: translateX(3px);
-}
+.right-sidebar a.toc-link:hover, .right-sidebar a.toc-link.active { opacity: 1; color: var(--hty-primary-color) !important; transform: translateX(3px); }
 
 /* =============================================== */
-/* 📱 4. 手机端响应式降级处理 */
+/* 📱 3. 手机端适配：APP 级侧边双抽屉交互 */
 /* =============================================== */
 @media screen and (max-width: 1199px) {
-  /* 手机端隐藏中间标题和右侧目录防挤爆 */
   .valaxy-nav .nav-center { display: none !important; }
-  .right-sidebar { display: none !important; }
-  
-  body:not(.is-home) .container {
-    display: block !important;
-    padding: 0 15px !important;
-    margin-top: 80px !important; 
-  }
-  body:not(.is-home) .sidebar {
-    position: relative !important;
-    top: 0 !important;
-    width: 100% !important;
-    margin: 20px auto !important;
-  }
-  body:not(.is-home) #content {
-    margin: 20px 0 !important;
-    padding: 20px !important;
-  }
+  body:not(.is-home) .container { display: block !important; padding: 0 10px !important; margin-top: 80px !important; }
+  body:not(.is-home) .sidebar { position: relative !important; top: 0 !important; width: 100% !important; margin: 20px auto !important; }
+  body:not(.is-home) #content { margin: 20px 0 !important; padding: 20px 15px !important; }
 }
-/* 🔪 解除宽度封印（严格限定在非首页，保护主页排版！） */
-body:not(.is-home) #content .post-card,
-body:not(.is-home) #content .post-block,
-body:not(.is-home) #content .markdown-body {
-  max-width: 100% !important;
-  width: 100% !important;
+
+/* 解除宽度封印（防溢出加强版） */
+body:not(.is-home) #content .post-card, body:not(.is-home) #content .post-block,
+body:not(.is-home) #content .post-content, body:not(.is-home) #content .markdown-body {
+  max-width: 100% !important; width: auto !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 !important; 
 }
-/* ================================================= */
-/* 📱 5. 终极手机端适配：APP 级侧边抽屉交互 */
-/* ================================================= */
 
 /* 默认在电脑端隐藏手机特有组件 */
-#mobile-menu-btn, #mobile-overlay, #mobile-toc-btn { display: none; }
-/* 默认状态（电脑端）：把汉堡菜单藏起来 */
-#mobile-menu-btn {
-  display: none !important;
-}
+#mobile-menu-btn, #mobile-overlay, #mobile-toc-btn { display: none !important; }
 
 @media screen and (max-width: 768px) {
+  /* 导航栏挤压处理 */
+  .valaxy-nav { display: flex !important; justify-content: space-between !important; grid-template-columns: none !important; padding: 0 10px !important; }
+  .valaxy-nav .nav-left, .valaxy-nav .nav-right { flex: 0 0 auto !important; gap: 4px !important; }
   
-  /* --- 1. 顶部导航栏变形 --- */
-  .desktop-nav-links { display: none !important; } /* 隐藏左侧那一排冗余图标 */
-  #mobile-menu-btn { display: inline-flex !important; } /* 唤醒汉堡菜单 */
+  /* 暴力只留汉堡和Home */
+  .valaxy-nav .nav-left .nav-item { display: none !important; }
+  .valaxy-nav .nav-left #mobile-menu-btn,
+  .valaxy-nav .nav-left .nav-item:nth-child(2) { display: inline-flex !important; }
   
+  .desktop-nav-links { display: none !important; } .desktop-only-icon { display: none !important; }
+
+  /* 居中标题 */
   .valaxy-nav .nav-center {
-    display: flex !important; /* 恢复中间的博客标题 */
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
+    position: absolute !important; left: 50% !important; top: 0; transform: translateX(-50%) !important; width: 40% !important; 
+    display: flex !important; justify-content: center !important; pointer-events: none; 
   }
-  /* 手机端空间小，滚动时不显示文章标题，只保留网站名 */
   .valaxy-nav .article-title { display: none !important; } 
+  .valaxy-nav .site-name { font-size: 1rem !important; letter-spacing: 0px !important; }
+  .valaxy-nav .nav-item { padding: 5px !important; }
+  .valaxy-nav .nav-item svg { width: 1.25rem !important; height: 1.25rem !important; }
 
-  /* --- 2. 暗黑遮罩层 --- */
+  /* --- 关键：JS调用的暗黑遮罩层 --- */
   #mobile-overlay {
-    display: block;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-  }
-  /* 只要任意抽屉打开，遮罩层就浮现 */
-  body.sidebar-open #mobile-overlay,
-  body.toc-open #mobile-overlay {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* --- 3. 核心：左侧个人卡片变抽屉！ --- */
-  body:not(.is-home) .sidebar {
-    position: fixed !important;
-    top: 0 !important;
-    left: -320px !important; /* 默认藏在屏幕左边外面 */
-    width: 280px !important;
-    height: 100vh !important;
-    z-index: 2001 !important;
-    margin: 0 !important;
-    border-radius: 0 20px 20px 0 !important; /* 只给右边加圆角，更像抽屉 */
-    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    overflow-y: auto;
-    padding-top: 50px !important; /* 给顶部留点呼吸空间 */
-  }
-  /* 点击汉堡按钮后，滑入屏幕！ */
-  body.sidebar-open .sidebar {
-    transform: translateX(320px) !important; 
-  }
-
-  /* --- 4. 核心：右侧文章目录变抽屉！ --- */
-  .right-sidebar {
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    right: -320px !important; /* 默认藏在屏幕右边外面 */
-    width: 260px !important;
-    height: 100vh !important;
-    z-index: 2001 !important;
-    margin: 0 !important;
-    border-radius: 20px 0 0 20px !important;
-    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    padding-top: 50px !important;
-  }
-  body.toc-open .right-sidebar {
-    transform: translateX(-320px) !important;
-  }
-
-  /* 悬浮在右下角的召唤目录按钮 */
-  #mobile-toc-btn {
-    display: flex;
-    position: fixed;
-    bottom: 30px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-    background: var(--my-card-bg);
-    border-radius: 50%; /* 圆形悬浮球 */
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    z-index: 1999;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    color: var(--hty-primary-color);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  #mobile-toc-btn:active { transform: scale(0.9); }
-
-  @media screen and (max-width: 768px) {
-  /* --- 1. 导航栏重塑：拒绝叠罗汉 --- */
-  .valaxy-nav {
-    display: flex !important; /* 强制改回弹性盒子 */
-    justify-content: space-between !important;
-    grid-template-columns: none !important; /* 彻底删掉 Grid 规则 */
-    padding: 0 10px !important;
-  }
-
-  /* 左侧和右侧图标组：不许拉伸，给中间腾位置 */
-  .valaxy-nav .nav-left,
-  .valaxy-nav .nav-right {
-    flex: 0 0 auto !important;
-    gap: 4px !important; /* 手机端图标紧凑点 */
-  }
-
-  .desktop-nav-links { display: none !important; } /* 隐藏电脑端多余图标 */
- #mobile-menu-btn {
-    display: inline-flex !important;
-  }
-  .desktop-only-icon {
-    display: none !important;
-  }
-
-  /* 中间标题：绝对居中且不许压人 */
-  .valaxy-nav .nav-center {
-    position: absolute !important;
-    left: 50% !important;
-    top: 0;
-    transform: translateX(-50%) !important;
-    width: 40% !important; /* 核心：限制宽度，防止挤到两边的图标 */
-    display: flex !important;
-    justify-content: center !important;
-    pointer-events: none; /* 防止遮挡点击图标 */
-  }
-
-  .valaxy-nav .site-name {
-    font-size: 1rem !important; /* 手机标题稍微缩小点，防溢出 */
-    letter-spacing: 0px !important;
-  }
-
-  .valaxy-nav .nav-item {
-    padding: 5px !important;
-  }
-  .valaxy-nav .nav-item svg {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
-  }
-  }
-  /* --- 以下保持之前的抽屉逻辑不变 --- */
-  #mobile-overlay {
-    display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 2000;
-    opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    display: block !important; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
   }
   body.sidebar-open #mobile-overlay, body.toc-open #mobile-overlay { opacity: 1; visibility: visible; }
+
+  /* --- 左侧抽屉 (汉堡菜单呼出) --- */
   body:not(.is-home) .sidebar {
-    position: fixed !important; top: 0 !important; left: -320px !important;
-    width: 280px !important; height: 100vh !important; z-index: 2001 !important;
-    margin: 0 !important; border-radius: 0 20px 20px 0 !important;
-    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    overflow-y: auto; padding-top: 50px !important;
+    position: fixed !important; top: 0 !important; left: -320px !important; width: 280px !important; height: 100vh !important;
+    z-index: 2001 !important; margin: 0 !important; border-radius: 0 20px 20px 0 !important; 
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important; overflow-y: auto; padding-top: 50px !important; 
   }
   body.sidebar-open .sidebar { transform: translateX(320px) !important; }
-}
-/* ================================================= */
-/* 💻 修复：代码块防溢出与丝滑滚动优化 */
-/* ================================================= */
-.markdown-body pre,
-.markdown-body .highlight {
-  max-width: 100% !important;     /* 绝不允许代码块比手机屏幕还宽 */
-  width: 100% !important;
-  overflow-x: auto !important;    /* 内容太长时，自动出现横向滚动条 */
-  box-sizing: border-box !important;
-  -webkit-overflow-scrolling: touch !important; /* 🍎 核心：让 iPhone 等手机端手指滑动极其丝滑 */
-  padding-bottom: 5px !important; /* 给底部的滚动条留一点呼吸空间，防遮挡文字 */
+
+  /* --- 右侧抽屉 (悬浮按钮呼出) --- */
+  .right-sidebar {
+    display: block !important; position: fixed !important; top: 0 !important; right: -320px !important; width: 260px !important;
+    height: 100vh !important; z-index: 2001 !important; margin: 0 !important; border-radius: 20px 0 0 20px !important;
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important; padding-top: 50px !important;
+  }
+  body.toc-open .right-sidebar { transform: translateX(-320px) !important; }
+
+  /* --- 关键：JS调用的悬浮目录按钮 --- */
+  #mobile-toc-btn {
+    display: flex !important; position: fixed; bottom: 30px; right: 20px; width: 48px; height: 48px;
+    background: var(--my-card-bg); border-radius: 50%; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 1999;
+    justify-content: center; align-items: center; color: var(--hty-primary-color); cursor: pointer; transition: transform 0.2s;
+  }
+  #mobile-toc-btn:active { transform: scale(0.9); }
 }
 
-/* 🎨 顺手美化一下滚动条，让它看起来更精致，不那么突兀 */
-.markdown-body .highlight::-webkit-scrollbar,
-.markdown-body pre::-webkit-scrollbar {
-  height: 6px !important;         /* 滚动条变细一点 */
+/* ================================================= */
+/* 💻 4. 修复：代码块防溢出与强制折行 */
+/* ================================================= */
+.markdown-body pre, 
+.markdown-body .highlight pre,
+.markdown-body .highlight code,
+.markdown-body .highlight table td.code pre {
+  white-space: pre-wrap !important; 
+  word-break: break-all !important; 
+  overflow-wrap: anywhere !important;
+  max-width: 100% !important; 
+  width: 100% !important; 
+  box-sizing: border-box !important;
+  overflow-x: hidden !important; 
+  padding-bottom: 5px !important; 
 }
-.markdown-body .highlight::-webkit-scrollbar-thumb,
-.markdown-body pre::-webkit-scrollbar-thumb {
-  background: rgba(150, 150, 150, 0.4) !important; /* 半透明灰色 */
-  border-radius: 4px !important;  /* 圆角滚动条 */
+.markdown-body .highlight::-webkit-scrollbar, .markdown-body pre::-webkit-scrollbar { height: 6px !important; }
+.markdown-body .highlight::-webkit-scrollbar-thumb, .markdown-body pre::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.4) !important; border-radius: 4px !important; }
+.markdown-body .highlight::-webkit-scrollbar-track, .markdown-body pre::-webkit-scrollbar-track { background: transparent !important; }
+
+/* =============================================== */
+/* ✒️ 5. 终极排版与字体质感升级 (完美黑夜模式) */
+/* =============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap');
+
+body {
+  font-family: var(--font-family-sans) !important;
+  color: var(--my-text-body) !important;
+  -webkit-font-smoothing: antialiased !important; 
+  -moz-osx-font-smoothing: grayscale !important;
 }
-.markdown-body .highlight::-webkit-scrollbar-track,
-.markdown-body pre::-webkit-scrollbar-track {
-  background: transparent !important; /* 轨道全透明 */
+
+.markdown-body {
+  font-family: var(--font-family-sans) !important;
+  font-size: 16px !important;            
+  line-height: 1.85 !important;          
+  letter-spacing: 0.04em !important;     
+  color: var(--my-text-body) !important; 
+  box-sizing: border-box !important; 
 }
+
+.markdown-body p { margin-top: 0 !important; margin-bottom: 1.6em !important; }
+.markdown-body ul, .markdown-body ol { margin-bottom: 1.6em !important; line-height: 1.85 !important; }
+.markdown-body li { margin-bottom: 0.5em !important; }
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6,
+.post-title, .site-name, .article-title, .right-sidebar::before {
+  font-family: var(--font-family-serif) !important;
+  font-weight: 900 !important;
+  color: var(--my-text-heading) !important; 
+}
+
+/* 1. 只有文章页里真正的 H1 主标题才放大居中，展现气势 */
+h1.post-title {
+  font-size: 2.2rem !important;
+  text-align: center !important;
+  margin-bottom: 1rem !important;
+  letter-spacing: 0.05em !important;
+  display: block !important;
+  width: 100%;
+}
+
+/* 2. 归档页、标签页时间轴里的辅助标题：精巧、靠左 */
+.archive .post-title,
+.category .post-title,
+.tag .post-title {
+  font-size: 1.15rem !important;
+  text-align: left !important;
+  margin-bottom: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+/* 3. 首页文章卡片里的标题：大小适中、居中对齐 */
+.post-card .post-title {
+  font-size: 1.4rem !important;   /* 比归档大，比文章内H1小 */
+  text-align: center !important;  /* 恢复居中，和下方的日期按钮对齐 */
+  margin-bottom: 0.5rem !important;
+  letter-spacing: 0 !important;
+  display: block !important;
+  width: 100%;
+}
+.post-meta { text-align: center !important; margin-bottom: 3.5rem !important; font-family: var(--font-family-sans) !important; }
+
+.markdown-body h2 {
+  font-size: 1.6rem !important; margin-top: 3.5rem !important; margin-bottom: 1.5rem !important;
+  padding-bottom: 0.4em !important; border-bottom: 1px solid var(--my-border-color) !important; 
+}
+.markdown-body h3 { font-size: 1.3rem !important; margin-top: 2.5rem !important; margin-bottom: 1.2rem !important; }
+
+.markdown-body blockquote {
+  margin: 2.5rem 0 !important; padding: 1.2rem 1.5rem !important;
+  border-left: 4px solid var(--hty-primary-color) !important; 
+  background-color: var(--my-quote-bg) !important;     
+  border-radius: 0 8px 8px 0 !important;
+  color: var(--my-text-quote) !important;              
+  font-size: 0.95em !important;
+}
+.markdown-body blockquote p { margin-bottom: 0 !important; }
