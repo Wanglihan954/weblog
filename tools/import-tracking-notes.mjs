@@ -3,6 +3,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const notesRoot = process.argv[2];
+const requestedSlugs = new Set(process.argv.slice(3));
 if (!notesRoot) {
   console.error('Usage: node tools/import-tracking-notes.mjs <tracking-notes-directory>');
   process.exit(1);
@@ -10,8 +11,16 @@ if (!notesRoot) {
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const postsRoot = path.join(repoRoot, 'source', '_posts');
-const imageRoot = path.join(repoRoot, 'source', 'images', 'tracking');
-const publicImageBase = 'https://20020730.xyz/images/tracking';
+const noteCollection = path.basename(path.resolve(notesRoot));
+const collectionConfig = {
+  Tracking: { category: 'Tracking', imageDirectory: 'tracking' },
+  IR_VIS_Reg: { category: '红外-可见光配准', imageDirectory: 'ir-vis-reg' },
+}[noteCollection] ?? {
+  category: noteCollection.replaceAll('_', ' '),
+  imageDirectory: noteCollection.toLowerCase().replaceAll('_', '-'),
+};
+const imageRoot = path.join(repoRoot, 'source', 'images', collectionConfig.imageDirectory);
+const publicImageBase = `/images/${collectionConfig.imageDirectory}`;
 
 const yamlQuote = (value) => JSON.stringify(String(value));
 
@@ -44,8 +53,12 @@ function plainText(markdown) {
     .trim();
 }
 
+function cleanInlineTitle(value) {
+  return plainText(value.replace(/<br\s*\/?\s*>/gi, ' ').replace(/<[^>]+>/g, ' '));
+}
+
 function extractAbstract(body) {
-  const match = body.match(/^## Abstract\s*\r?\n([\s\S]*?)(?=\r?\n---\s*$)/m);
+  const match = body.match(/^## Abstract(?:（[^\r\n]*）)?\s*\r?\n([\s\S]*?)(?=\r?\n---\s*$)/m);
   if (!match) return '';
   const text = plainText(match[1]);
   if (text.length <= 220) return text;
@@ -139,7 +152,23 @@ const inlineMathReplacements = new Map([
 function normalizeInlineMath(body) {
   return body.replace(/`([^`\r\n]+)`/g, (match, content) => {
     const formula = inlineMathReplacements.get(content);
-    return formula ? `$${formula}$` : match;
+    if (formula) return `$${formula}$`;
+
+    const value = content.trim();
+    const isSingleSymbol = /^[A-Za-zΑ-ω]$/u.test(value);
+    const isIndexedSymbol = /^[A-Za-zΑ-ω]\d+$/u.test(value);
+    const isSymbolList = /^(?:[A-Za-zΑ-ω](?:_[A-Za-z0-9]+|\d+)?)(?:\s*,\s*[A-Za-zΑ-ω](?:_[A-Za-z0-9]+|\d+)?)+$/u.test(value);
+    const hasMathNotation = /[_^=<>∈≤≥≈≪∞∼λμωστθδΔΓΣ⊙⊗⊕×+]/u.test(value);
+    const startsLikeVariable = /^[A-Za-zΑ-ω](?:['’])?(?:[_^0-9{(]|\s*[=<>∈≤≥≈≪])/u.test(value);
+    const isLatexFragment = /^\\(?:bar|hat|tilde|Sigma|Delta|Gamma|lambda|mu|omega|sigma|tau|theta|delta|odot|otimes|oplus|in)\b/.test(value);
+    const looksLikePathOrCode = /(?:https?:\/\/|[\\/].+\.(?:py|json|txt|md|pdf)|\.(?:py|json|txt|md|pdf)$|->$|\b(?:Conv|ReLU|Linear|Pool|Softplus|TopK)\b)/i.test(value);
+
+    if (looksLikePathOrCode || !(isSingleSymbol || isIndexedSymbol || isSymbolList || isLatexFragment || (hasMathNotation && startsLikeVariable))) {
+      return match;
+    }
+
+    const normalized = value.replace(/_([A-Za-z][A-Za-z0-9]{1,})(?=$|[\s,()/\[\].+*=<>^])/g, '_{\\mathrm{$1}}');
+    return `$${normalized}$`;
   });
 }
 
@@ -149,15 +178,28 @@ function polishBody(body, slug) {
   body = body
     .split('\n')
     .filter((line) => !/zotero:\/\//i.test(line))
+    .filter((line) => !/^\*\*Zotero:\*\*/i.test(line))
+    .filter((line) => !/^[-*]\s+\*\*本地素材[：:]\*\*/.test(line))
     .filter((line) => !/^\*\*[^:]+:\*\*\s*—(?:\s*\|\s*—)?\s*$/.test(line))
     .join('\n');
-  body = body.replace(/^> \[!important\]\s*$/gm, '> **阅读说明**');
-  body = body.replace(/^> \[!warning\]\s*$/gm, '> **注意**');
+  body = body.replace(/^> \[!important\](?:\s+(.+))?\s*$/gm, (_match, title) =>
+    title ? `> **阅读说明｜${title.trim()}**` : '> **阅读说明**',
+  );
+  body = body.replace(/^> \[!warning\](?:\s+(.+))?\s*$/gm, (_match, title) =>
+    title ? `> **注意｜${title.trim()}**` : '> **注意**',
+  );
+  body = body.replace(/^> \[!note\](?:\s+(.+))?\s*$/gm, (_match, title) =>
+    title ? `> **补充说明｜${title.trim()}**` : '> **补充说明**',
+  );
   body = body.replace(
     /有官方代码时，Method 必须结合源码理解；没有代码时按照论文 Method 和 Supplementary 整理。/g,
     '方法部分优先结合公开源码理解；未提供代码时，则依据论文与补充材料整理。',
   );
   body = body.replace(/^暂无 Zotero 标注.*$/gm, '本节暂无额外阅读标注。');
+  body = body.replace(/^本地素材:\s*Zotero 条目（全文已提取为 .*?）\s*$/gm, '材料说明：本文依据论文全文整理。');
+  body = body.replace(/基于论文全文（`?\.papers_fulltext\/[^)`]+`?）/g, '基于论文全文');
+  body = body.replace(/本地没有 Zotero 高亮；基于 full text 的深读标注/g, '本文未包含额外高亮；以下为基于论文全文的深读标注');
+  body = body.replace(/没有本地代码，不能声称复现论文数值/g, '论文未提供公开代码，不能声称复现论文数值');
   body = normalizeInlineMath(body);
   body = body.replace(/\n## 论文图示（截图）\s*\n\s*## 论文图示（截图）/g, '\n## 论文图示（截图）');
   body = body.replace(
@@ -172,7 +214,7 @@ function polishBody(body, slug) {
     return `$$${normalizedFormula}$$`;
   });
   body = body.replace(
-    /(## Abstract\s*\n[\s\S]*?\n)(---\s*\n)/,
+    /(## Abstract(?:（[^\n]*）)?\s*\n[\s\S]*?\n)(---\s*\n)/,
     '$1<!-- more -->\n\n$2',
   );
   body = normalizeHeadings(body);
@@ -229,6 +271,7 @@ fs.mkdirSync(imageRoot, { recursive: true });
 const noteFiles = fs
   .readdirSync(notesRoot)
   .filter((name) => name.endsWith('_笔记.md'))
+  .filter((name) => requestedSlugs.size === 0 || requestedSlugs.has(name.replace(/_笔记\.md$/, '')))
   .sort((a, b) => a.localeCompare(b, 'en'));
 
 const dayCounters = new Map();
@@ -242,7 +285,8 @@ for (const filename of noteFiles) {
   const inputPath = path.join(notesRoot, filename);
   const markdown = fs.readFileSync(inputPath, 'utf8');
   const { body, raw } = parseSourceFrontMatter(markdown);
-  const paperTitle = body.match(/^\*\*Title:\*\*\s*(.+?)\s*$/m)?.[1]?.trim() ?? slug;
+  const rawPaperTitle = body.match(/^\*\*Title:\*\*\s*(.+?)\s*$/m)?.[1]?.trim();
+  const paperTitle = rawPaperTitle ? cleanInlineTitle(rawPaperTitle) : slug;
   const updated = scalar(raw, 'updated') ?? scalar(raw, 'date') ?? '2026-08-18';
   const countForDay = dayCounters.get(updated) ?? 0;
   dayCounters.set(updated, countForDay + 1);
@@ -251,15 +295,15 @@ for (const filename of noteFiles) {
   const publicationTime = `${updated} ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
   const originalTags = list(raw, 'tags');
   const task = scalar(raw, 'task');
-  const tags = [...new Set([...originalTags, task, 'Tracking'].filter(Boolean))];
+  const tags = [...new Set([...originalTags, task, collectionConfig.category].filter(Boolean))];
   const description = extractAbstract(body);
 
-  const frontMatter = [
+  const frontMatterLines = [
     '---',
     `title: ${yamlQuote(`论文阅读｜${paperTitle}`)}`,
     'categories:',
     '  - 文献阅读',
-    '  - Tracking',
+    `  - ${yamlQuote(collectionConfig.category)}`,
     'tags:',
     ...tags.map((tag) => `  - ${yamlQuote(tag)}`),
     `description: ${yamlQuote(description)}`,
@@ -269,10 +313,14 @@ for (const filename of noteFiles) {
     `updated: ${updated} 23:00:00`,
     '---',
     '',
-  ].join('\n');
+  ];
 
   const outputName = `论文阅读-${slug}.md`;
   const outputPath = path.join(postsRoot, outputName);
+  const existingMarkdown = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : '';
+  const existingAbbrlink = scalar(parseSourceFrontMatter(existingMarkdown).raw, 'abbrlink');
+  if (existingAbbrlink) frontMatterLines.splice(-2, 0, `abbrlink: ${yamlQuote(existingAbbrlink.replace(/^['"]|['"]$/g, ''))}`);
+  const frontMatter = frontMatterLines.join('\n');
   expectedPosts.add(outputPath);
   fs.writeFileSync(outputPath, `${frontMatter}${polishBody(body, slug)}`, 'utf8');
 
@@ -292,10 +340,12 @@ for (const filename of noteFiles) {
   report.push({ slug, outputName, title: paperTitle, images: imageRefs.length });
 }
 
-for (const entry of fs.readdirSync(postsRoot)) {
-  if (!/^论文阅读-.+\.md$/.test(entry)) continue;
-  const fullPath = path.join(postsRoot, entry);
-  if (!expectedPosts.has(fullPath)) fs.rmSync(fullPath);
+if (requestedSlugs.size === 0) {
+  for (const entry of fs.readdirSync(postsRoot)) {
+    if (!/^论文阅读-.+\.md$/.test(entry)) continue;
+    const fullPath = path.join(postsRoot, entry);
+    if (!expectedPosts.has(fullPath)) fs.rmSync(fullPath);
+  }
 }
 
 console.log(
