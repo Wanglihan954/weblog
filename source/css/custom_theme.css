@@ -18,6 +18,11 @@
   --my-text-heading: #fff !important;
   --my-text-quote: #d4d8d5 !important;
   --my-border-color: rgba(255, 255, 255, 0.12) !important;
+  --yun-bg-image: url("/images/background-remiel-light.webp");
+}
+
+html.dark {
+  --yun-bg-image: url("/images/background-dark.webp");
 }
 
 html {

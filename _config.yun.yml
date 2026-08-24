@@ -37,7 +37,7 @@ notice:
   content: 欢迎光临我的世界
 bg_image:
   enable: true
-  url: /images/background-light.webp
+  url: /images/background-remiel-light.webp
   dark: /images/background-dark.webp
   blur: 10px # 设置背景模糊程度
   opacity: 0.8
@@ -238,7 +238,7 @@ katex:
 # 在配置文件中找到或添加这段代码
 head:
   css:
-    - /css/custom_theme.css?v=20260812-3
+    - /css/custom_theme.css?v=20260824-1
     - /css/projects.css?v=20260816-4
   js:
     defer:
