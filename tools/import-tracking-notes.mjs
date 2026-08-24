@@ -197,6 +197,8 @@ function polishBody(body, slug) {
   );
   body = body.replace(/^暂无 Zotero 标注.*$/gm, '本节暂无额外阅读标注。');
   body = body.replace(/^本地素材:\s*Zotero 条目（全文已提取为 .*?）\s*$/gm, '材料说明：本文依据论文全文整理。');
+  body = body.replace(/^- \*\*Local Code:\*\*.*\r?\n?/gm, '');
+  body = body.replace(/^Local:\s*[A-Za-z]:[\\/].*\r?\n?/gm, '');
   body = body.replace(/基于论文全文（`?\.papers_fulltext\/[^)`]+`?）/g, '基于论文全文');
   body = body.replace(/本地没有 Zotero 高亮；基于 full text 的深读标注/g, '本文未包含额外高亮；以下为基于论文全文的深读标注');
   body = body.replace(/没有本地代码，不能声称复现论文数值/g, '论文未提供公开代码，不能声称复现论文数值');
