@@ -43,7 +43,7 @@ bg_image:
   opacity: 0.8
 avatar:
   enable: true
-  url: /images/funingna.png
+  url: /images/niyijiku-avatar.webp
   rounded: true
   opacity: 1
   mickey_mouse: false
@@ -202,9 +202,32 @@ utterances:
   theme: github-light
 waline:
   enable: true
-  serverURL: https://waline2333-ten.vercel.app
+  serverURL: https://comment.20020730.xyz
   visitor: true
   comment: true
+  emoji:
+    - //unpkg.com/@waline/emojis@1.1.0/weibo
+    - name: 嗯呢漫布
+      folder: /images/zzz-stickers
+      prefix: bangboo-
+      type: jpg
+      icon: /images/zzz-stickers/bangboo-thanks.jpg
+      items:
+        - gift
+        - thanks
+        - rest
+    - name: 丽都漫步
+      folder: /images/zzz-stickers
+      prefix: lidu-
+      type: png
+      icon: /images/zzz-stickers/lidu-anby.png
+      items:
+        - anby
+        - nekomata
+        - lycaon
+        - rina
+        - soldier11
+        - wise
 comment:
   enable: true
   tips:
@@ -239,7 +262,7 @@ katex:
 head:
   css:
     - /css/custom_theme.css?v=20260824-1
-    - /css/projects.css?v=20260816-4
+    - /css/projects.css?v=20260817-1
   js:
     defer:
       - /js/web-pet.js

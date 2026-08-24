@@ -87,7 +87,7 @@ hexo.extend.helper.register('yun_config', function () {
       const emoji = exportConfig.waline.config.emoji
       if (emoji) {
         emoji.forEach((e, i) => {
-          if (e.startsWith('@'))
+          if (typeof e === 'string' && e.startsWith('@'))
             emoji[i] = host + emoji[i]
         })
       }

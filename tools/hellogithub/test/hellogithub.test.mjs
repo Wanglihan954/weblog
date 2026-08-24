@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   avatarFilenameFromRepo,
   buildFeed,
+  fetchGitHubAvatarUrl,
   fetchImageBytes,
   fullDescription,
   imageFilenameFromUrl,
@@ -32,7 +33,7 @@ const payload = {
 test('buildFeed creates the data shape used by the projects page', () => {
   const feed = buildFeed(payload);
   assert.equal(feed.issue, 125);
-  assert.equal(feed.assets_version, 1);
+  assert.equal(feed.assets_version, 2);
   assert.equal(feed.content_version, 1);
   assert.equal(feed.source_url, 'https://hellogithub.com/periodical/volume/125');
   assert.equal(feed.groups[0].key, 'hg-1');
@@ -53,6 +54,22 @@ test('buildFeed creates the data shape used by the projects page', () => {
 test('avatarFilenameFromRepo creates a safe local filename', () => {
   assert.equal(avatarFilenameFromRepo('OpenAI/demo'), 'openai.png');
   assert.equal(avatarFilenameFromRepo('../unsafe'), null);
+});
+
+test('fetchGitHubAvatarUrl uses the repository API and returns the owner avatar', async () => {
+  let requestedUrl;
+  let requestedOptions;
+  const avatarUrl = await fetchGitHubAvatarUrl('OpenAI/demo', async (url, options) => {
+    requestedUrl = url;
+    requestedOptions = options;
+    return new Response(JSON.stringify({
+      owner: { avatar_url: 'https://avatars.githubusercontent.com/u/14957082?v=4' }
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  }, 'test-token');
+  assert.equal(requestedUrl, 'https://api.github.com/repos/OpenAI/demo');
+  assert.equal(requestedOptions.headers.Authorization, 'Bearer test-token');
+  assert.match(avatarUrl, /^https:\/\/avatars\.githubusercontent\.com\/u\/14957082\?/);
+  assert.match(avatarUrl, /s=96/);
 });
 
 test('fetchImageBytes sends the anti-hotlink referer and validates the image', async () => {
