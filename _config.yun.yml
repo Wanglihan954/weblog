@@ -261,7 +261,7 @@ katex:
 # 在配置文件中找到或添加这段代码
 head:
   css:
-    - /css/custom_theme.css?v=20260824-1
+    - /css/custom_theme.css?v=20260824-2
     - /css/projects.css?v=20260817-1
   js:
     defer:
