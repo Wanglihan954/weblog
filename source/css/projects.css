@@ -941,6 +941,11 @@ body.is-project-dialog-open {
   object-fit: cover;
 }
 
+.ik-project-dialog__avatar-fallback[hidden],
+.ik-project-dialog__avatar img[hidden] {
+  display: none;
+}
+
 .ik-project-dialog__close {
   display: grid;
   width: 54px;
@@ -1426,7 +1431,26 @@ body.is-projects-page #projects-waline .wl-btn.primary {
 
 body.is-projects-page #projects-waline .wl-panel:focus-within {
   height: 252px;
+  overflow: visible;
   border-color: var(--ik-project-primary);
+}
+
+/* Waline renders emoji and GIF pickers inside the editor panel. Open them
+   upward so the dialog's intentionally clipped comment column does not hide
+   the picker below the composer. */
+body.is-projects-page #projects-waline .wl-emoji-popup,
+body.is-projects-page #projects-waline .wl-gif-popup {
+  top: auto !important;
+  right: 0;
+  bottom: calc(100% + 10px) !important;
+  left: auto;
+  z-index: 20;
+  max-width: min(460px, calc(100vw - 48px));
+}
+
+body.is-projects-page #projects-waline .wl-gif-popup {
+  max-height: min(340px, calc(100vh - 260px));
+  overflow-y: auto;
 }
 
 body.is-projects-page #projects-waline .wl-panel:focus-within::before {

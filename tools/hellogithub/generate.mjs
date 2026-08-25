@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HELLOGITHUB_API = 'https://api.hellogithub.com/v1/periodical/volume/';
-const ASSETS_VERSION = 1;
+const ASSETS_VERSION = 2;
 const CONTENT_VERSION = 1;
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -60,6 +60,34 @@ export function avatarFilenameFromRepo(repo) {
   return /^[a-zA-Z0-9-]{1,39}$/.test(owner) ? `${owner.toLowerCase()}.png` : null;
 }
 
+export async function fetchGitHubAvatarUrl(repo, fetchImpl = fetch, token = process.env.GITHUB_TOKEN || '') {
+  const parts = String(repo || '').split('/');
+  if (parts.length !== 2 || !parts.every((part) => /^[a-zA-Z0-9._-]+$/.test(part))) {
+    throw new Error(`GitHub 仓库名称无效：${repo}`);
+  }
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'seventh-knot-hellogithub-sync/1.0',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const apiUrl = `https://api.github.com/repos/${parts.map(encodeURIComponent).join('/')}`;
+  const response = await fetchImpl(apiUrl, {
+    headers,
+    signal: AbortSignal.timeout(15_000)
+  });
+  if (!response.ok) throw new Error(`GitHub 仓库 API 请求失败：${response.status} ${repo}`);
+  const avatarUrl = (await response.json())?.owner?.avatar_url;
+  try {
+    const parsed = new URL(avatarUrl);
+    if (parsed.protocol !== 'https:' || parsed.hostname !== 'avatars.githubusercontent.com') throw new Error();
+    parsed.searchParams.set('s', '96');
+    return parsed.toString();
+  } catch {
+    throw new Error(`GitHub 仓库未返回有效头像：${repo}`);
+  }
+}
+
 function toProject(item, volume, availableAssets) {
   if (!item?.name || !item?.full_name || !item?.github_url || !item?.description) {
     throw new Error(`HelloGitHub 第 ${volume} 期包含字段不完整的项目`);
@@ -108,7 +136,6 @@ function assetJobs(payload) {
   const jobs = payload.data.flatMap((group) => (group.items || []).flatMap((item) => {
     const filename = imageFilenameFromUrl(item.image_url);
     const avatarFilename = avatarFilenameFromRepo(item.full_name);
-    const owner = avatarFilename ? item.full_name.split('/', 1)[0] : null;
     return [
       filename ? {
         kind: 'cover',
@@ -122,12 +149,12 @@ function assetJobs(payload) {
       } : null,
       avatarFilename ? {
         kind: 'avatar',
-        url: `https://github.com/${encodeURIComponent(owner)}.png?size=96`,
+        repo: item.full_name,
         filename: avatarFilename,
         directory: avatarDirectory,
         required: false,
-        attempts: 1,
-        timeoutMs: 8_000,
+        attempts: 2,
+        timeoutMs: 15_000,
         headers: { Accept: 'image/*' }
       } : null
     ].filter(Boolean);
@@ -184,7 +211,10 @@ async function downloadAssets(payload, fetchImpl) {
       let lastError;
       for (let attempt = 1; attempt <= job.attempts; attempt += 1) {
         try {
-          const bytes = await fetchImageBytes(job.url, job.headers, fetchImpl, job.timeoutMs);
+          const assetUrl = job.kind === 'avatar'
+            ? await fetchGitHubAvatarUrl(job.repo, fetchImpl)
+            : job.url;
+          const bytes = await fetchImageBytes(assetUrl, job.headers, fetchImpl, job.timeoutMs);
           const temporaryPath = `${targetPath}.tmp`;
           await writeFile(temporaryPath, bytes);
           await rename(temporaryPath, targetPath);
@@ -197,7 +227,7 @@ async function downloadAssets(payload, fetchImpl) {
         }
       }
       if (lastError && job.required) throw lastError;
-      if (lastError) console.warn(`[hellogithub] 头像下载失败，使用 GH 占位符：${job.url}`);
+      if (lastError) console.warn(`[hellogithub] 头像下载失败，使用 GH 占位符：${job.repo}`);
     }
   }
   await Promise.all(Array.from({ length: Math.min(6, jobs.length) }, () => processNextJob()));
